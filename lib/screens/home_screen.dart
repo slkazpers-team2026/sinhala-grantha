@@ -117,6 +117,28 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           ],
         ),
         actions: [
+          // Web only: prompt visitors to install the Android app
+          if (kIsWeb)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: TextButton.icon(
+                onPressed: _downloadApk,
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.indigoAccent,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                icon: const Icon(Icons.android, size: 18),
+                label: MediaQuery.sizeOf(context).width >= 480
+                    ? const Text('Download App', style: TextStyle(fontSize: 13))
+                    : const SizedBox.shrink(),
+              ),
+            ),
           IconButton(
             icon: const Icon(Icons.refresh, color: Colors.white70),
             onPressed: _loadData,
@@ -272,16 +294,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           child: HomeAdBanner(key: _bannerKey),
         ),
       ),
-      // Web only: nudge visitors toward the Android app
-      floatingActionButton: kIsWeb
-          ? FloatingActionButton.extended(
-              onPressed: _downloadApk,
-              backgroundColor: Colors.indigoAccent,
-              foregroundColor: Colors.white,
-              icon: const Icon(Icons.android),
-              label: const Text('Download Mobile App'),
-            )
-          : null,
     );
   }
 }
