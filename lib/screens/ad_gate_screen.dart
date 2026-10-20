@@ -6,6 +6,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import '../services/ad_config_service.dart';
 import '../services/drm_service.dart';
 import '../services/book_storage_service.dart';
+import '../widgets/web_ad/web_ad.dart';
 import 'epub_reader_screen.dart';
 
 class AdGateScreen extends StatefulWidget {
@@ -232,14 +233,18 @@ class _AdGateScreenState extends State<AdGateScreen> {
             ),
           ),
         ),
-        body: (!kIsWeb && _webViewController != null)
-            ? WebViewWidget(controller: _webViewController!)
-            : const Center(
-                child: Text(
-                  'දැන්වීම් පූරණය වෙමින්...',
-                  style: TextStyle(color: Colors.white60, fontSize: 13),
-                ),
-              ),
+        body: kIsWeb
+            ? const Center(
+                child: WebAdBanner(viewType: 'ad-gate-html', height: 250),
+              )
+            : (_webViewController != null
+                ? WebViewWidget(controller: _webViewController!)
+                : const Center(
+                    child: Text(
+                      'දැන්වීම් පූරණය වෙමින්...',
+                      style: TextStyle(color: Colors.white60, fontSize: 13),
+                    ),
+                  )),
       ),
     );
   }

@@ -6,6 +6,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:http/http.dart' as http;
 import '../services/drm_service.dart';
 import '../services/ad_config_service.dart';
+import '../widgets/web_ad/web_ad.dart';
 
 class EpubReaderScreen extends StatefulWidget {
   final String bookTitle;
@@ -248,6 +249,9 @@ class _EpubReaderScreenState extends State<EpubReaderScreen> {
                       ),
                     ),
                   ),
+                  // Banner Ad (web): isolated iframe-based Adsterra slot (300x250)
+                  if (kIsWeb && AdConfigService.isAdsEnabled)
+                    const WebAdBanner(viewType: 'ad-reader-html', height: 250),
                   // Banner Ad (only shown when ads are enabled and not on web)
                   if (!kIsWeb && AdConfigService.isAdsEnabled && _bannerController != null)
                     Container(

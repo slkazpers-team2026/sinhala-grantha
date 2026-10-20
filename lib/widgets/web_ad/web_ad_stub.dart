@@ -6,7 +6,11 @@ import 'package:flutter/material.dart';
 /// platforms that have `dart:html` available. On mobile this widget collapses
 /// to nothing so the rest of the layout is unaffected.
 class WebAdBanner extends StatelessWidget {
-  const WebAdBanner({super.key, this.height = 110});
+  const WebAdBanner({super.key, required this.viewType, this.height = 110});
+
+  /// Ad slot identifier, e.g. `ad-banner-html`, `ad-gate-html` or
+  /// `ad-reader-html`. Ignored on mobile.
+  final String viewType;
 
   final double height;
 

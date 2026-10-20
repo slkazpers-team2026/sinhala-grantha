@@ -6,25 +6,44 @@ import 'package:flutter/material.dart';
 
 /// Web-only Adsterra banner.
 ///
-/// The ad script is loaded inside a dedicated `<iframe>` pointing at
-/// `ad_banner.html`. The iframe is registered as a platform view and mounted
-/// through an [HtmlElementView], which keeps the ad markup fully isolated from
-/// Flutter's own DOM and avoids the rendering jank of direct script injection.
+/// The ad script is loaded inside a dedicated `<iframe>` pointing at one of the
+/// static pages under `web/`. The iframe is registered as a platform view and
+/// mounted through an [HtmlElementView], which keeps the ad markup fully
+/// isolated from Flutter's own DOM and avoids the rendering jank of direct
+/// script injection.
+///
+/// Pass the [viewType] matching the ad slot. Each view type is registered once
+/// and maps to its own HTML page:
+/// - `ad-banner-html` -> `ad_banner.html` (home banner)
+/// - `ad-gate-html`   -> `ad_gate.html`   (interstitial screen)
+/// - `ad-reader-html` -> `ad_reader.html` (reader bottom banner)
 class WebAdBanner extends StatelessWidget {
-  const WebAdBanner({super.key, this.height = 110});
+  const WebAdBanner({super.key, required this.viewType, this.height = 110});
 
-  static const String _viewType = 'adsterra-banner-view';
-  static bool _isFactoryRegistered = false;
+  /// Registered platform view types and the HTML page each one loads.
+  static const Map<String, String> _viewSources = <String, String>{
+    'ad-banner-html': 'ad_banner.html',
+    'ad-gate-html': 'ad_gate.html',
+    'ad-reader-html': 'ad_reader.html',
+  };
 
+  static final Set<String> _registeredViewTypes = <String>{};
+
+  final String viewType;
   final double height;
 
-  static void _registerViewFactory() {
-    if (_isFactoryRegistered) return;
-    _isFactoryRegistered = true;
+  void _registerViewFactory() {
+    if (_registeredViewTypes.contains(viewType)) return;
 
-    ui_web.platformViewRegistry.registerViewFactory(_viewType, (int viewId) {
+    final String? source = _viewSources[viewType];
+    assert(source != null, 'Unknown web ad view type: $viewType');
+    if (source == null) return;
+
+    _registeredViewTypes.add(viewType);
+
+    ui_web.platformViewRegistry.registerViewFactory(viewType, (int viewId) {
       final html.IFrameElement iframe = html.IFrameElement()
-        ..src = 'ad_banner.html'
+        ..src = source
         ..style.border = 'none'
         ..style.width = '100%'
         ..style.height = '100%'
@@ -42,7 +61,7 @@ class WebAdBanner extends StatelessWidget {
     return SizedBox(
       height: height,
       width: double.infinity,
-      child: const HtmlElementView(viewType: _viewType),
+      child: HtmlElementView(viewType: viewType),
     );
   }
 }

@@ -52,7 +52,7 @@ class _HomeAdBannerState extends State<HomeAdBanner> {
     }
 
     if (kIsWeb) {
-      return const WebAdBanner();
+      return const WebAdBanner(viewType: 'ad-banner-html');
     }
 
     return Container(
