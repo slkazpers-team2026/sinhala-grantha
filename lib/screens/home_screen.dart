@@ -102,16 +102,19 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       appBar: AppBar(
         backgroundColor: const Color(0xFF1E293B),
         elevation: 0,
-        title: const Row(
+        title: Row(
           children: [
-            Icon(Icons.menu_book, color: Colors.indigoAccent),
-            SizedBox(width: 8),
-            Text(
-              'සිංහල ග්‍රන්ථ',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
+            const Icon(Icons.menu_book, color: Colors.indigoAccent),
+            const SizedBox(width: 8),
+            const Flexible(
+              child: Text(
+                'සිංහල ග්‍රන්ථ',
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
               ),
             ),
           ],
@@ -120,23 +123,31 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           // Web only: prompt visitors to install the Android app
           if (kIsWeb)
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: TextButton.icon(
+              padding: const EdgeInsets.only(left: 8, right: 4),
+              child: ElevatedButton.icon(
                 onPressed: _downloadApk,
-                style: TextButton.styleFrom(
+                style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.indigoAccent,
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  elevation: 0,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 10,
+                  ),
                   minimumSize: Size.zero,
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
-                icon: const Icon(Icons.android, size: 18),
-                label: MediaQuery.sizeOf(context).width >= 480
-                    ? const Text('Download App', style: TextStyle(fontSize: 13))
-                    : const SizedBox.shrink(),
+                icon: const Icon(Icons.android, size: 20),
+                label: const Text(
+                  'Download App',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
             ),
           IconButton(
