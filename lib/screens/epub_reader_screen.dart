@@ -249,9 +249,9 @@ class _EpubReaderScreenState extends State<EpubReaderScreen> {
                       ),
                     ),
                   ),
-                  // Banner Ad (web): isolated iframe-based Adsterra slot (300x250)
+                  // Banner Ad (web): isolated iframe-based Adsterra slot
                   if (kIsWeb && AdConfigService.isAdsEnabled)
-                    const WebAdBanner(viewType: 'ad-reader-html', height: 250),
+                    const WebAdBanner(viewType: 'ad-reader-html', height: 50),
                   // Banner Ad (only shown when ads are enabled and not on web)
                   if (!kIsWeb && AdConfigService.isAdsEnabled && _bannerController != null)
                     Container(
