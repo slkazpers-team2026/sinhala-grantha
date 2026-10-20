@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../models/category_model.dart';
 import '../models/book_model.dart';
 import '../services/book_api_service.dart';
@@ -14,6 +16,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
+  static const String _apkDownloadUrl =
+      'https://github.com/slkazpers-team2026/digital-poth-piyasa/releases/download/v1.0.0/Sinhala.Grantha.apk';
+
   List<CategoryModel> _categories = [];
   List<BookModel> _books = [];
   String _selectedCategoryId = 'ALL';
@@ -81,6 +86,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       _selectedCategoryId = categoryId;
     });
     _loadData();
+  }
+
+  Future<void> _downloadApk() async {
+    final uri = Uri.parse(_apkDownloadUrl);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      debugPrint('Could not launch $uri');
+    }
   }
 
   @override
@@ -260,6 +272,16 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           child: HomeAdBanner(key: _bannerKey),
         ),
       ),
+      // Web only: nudge visitors toward the Android app
+      floatingActionButton: kIsWeb
+          ? FloatingActionButton.extended(
+              onPressed: _downloadApk,
+              backgroundColor: Colors.indigoAccent,
+              foregroundColor: Colors.white,
+              icon: const Icon(Icons.android),
+              label: const Text('Download Mobile App'),
+            )
+          : null,
     );
   }
 }
